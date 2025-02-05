@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>6.4</version>
+    <date>2025-02-05T13:20:25Z</date>
     <template_groups>
+        <template_group>
+            <uuid>70b4225e3807426c8d279a799de3effd</uuid>
+            <name>ssl</name>
+        </template_group>
         <template_group>
             <uuid>a571c0d144b14fd4a87a9d9b2aa9fcd6</uuid>
             <name>Templates/Applications</name>
@@ -14,6 +19,9 @@
             <name>Template SSL Certificate Monitoring with Discovery</name>
             <groups>
                 <group>
+                    <name>ssl</name>
+                </group>
+                <group>
                     <name>Templates/Applications</name>
                 </group>
             </groups>
@@ -22,7 +30,6 @@
                     <uuid>d4f0239b0a28405286fcd41cfaca244e</uuid>
                     <name>SSL Certficates</name>
                     <key>ssl_cert_list</key>
-                    <delay>1h</delay>
                     <lifetime>1d</lifetime>
                     <item_prototypes>
                         <item_prototype>
@@ -41,20 +48,34 @@
                                 <trigger_prototype>
                                     <uuid>1b983320bfe14962ae843ac51486d779</uuid>
                                     <expression>last(/Template SSL Certificate Monitoring with Discovery/ssl_cert_check_expire[{#IPADDR},{#SSLPORT},{#SSLDOMAIN},{#TIMEOUT}])&lt;2</expression>
-                                    <name>SSL Certificate for {#SSLDOMAIN} on {#IPADDR}:{#SSLPORT} expires in 2 days</name>
+                                    <name>SSL Certificate for {#SSLDOMAIN} on {#IPADDR}:{#SSLPORT} expires in 0-2 days</name>
+                                    <event_name>SSL Certificate for {#SSLDOMAIN} on {#IPADDR}:{#SSLPORT} expires in {ITEM.LASTVALUE} days</event_name>
+                                    <opdata>Days: {ITEM.LASTVALUE3} of {ITEM.LASTVALUE2} ({ITEM.LASTVALUE1})</opdata>
                                     <priority>DISASTER</priority>
                                 </trigger_prototype>
                                 <trigger_prototype>
                                     <uuid>b64473beace64a5ca09242345ac845b9</uuid>
-                                    <expression>last(/Template SSL Certificate Monitoring with Discovery/ssl_cert_check_expire[{#IPADDR},{#SSLPORT},{#SSLDOMAIN},{#TIMEOUT}])&lt;7</expression>
-                                    <name>SSL Certificate for {#SSLDOMAIN} on {#IPADDR}:{#SSLPORT} expires in 7 days</name>
+                                    <expression>last(/Template SSL Certificate Monitoring with Discovery/ssl_cert_check_expire[{#IPADDR},{#SSLPORT},{#SSLDOMAIN},{#TIMEOUT}])&lt;7 and last(/Template SSL Certificate Monitoring with Discovery/ssl_cert_check_expire[{#IPADDR},{#SSLPORT},{#SSLDOMAIN},{#TIMEOUT}])&gt;3</expression>
+                                    <name>SSL Certificate for {#SSLDOMAIN} on {#IPADDR}:{#SSLPORT} expires in 3-7 days</name>
+                                    <event_name>SSL Certificate for {#SSLDOMAIN} on {#IPADDR}:{#SSLPORT} expires in {ITEM.LASTVALUE} days</event_name>
+                                    <opdata>Days: {ITEM.LASTVALUE3} of {ITEM.LASTVALUE2} ({ITEM.LASTVALUE1})</opdata>
                                     <priority>HIGH</priority>
                                 </trigger_prototype>
                                 <trigger_prototype>
                                     <uuid>a3ff6f34bfa3463189f67ebfeb8cfbb5</uuid>
-                                    <expression>last(/Template SSL Certificate Monitoring with Discovery/ssl_cert_check_expire[{#IPADDR},{#SSLPORT},{#SSLDOMAIN},{#TIMEOUT}])&lt;30</expression>
-                                    <name>SSL Certificate for {#SSLDOMAIN} on {#IPADDR}:{#SSLPORT} expires in 30 days</name>
+                                    <expression>last(/Template SSL Certificate Monitoring with Discovery/ssl_cert_check_expire[{#IPADDR},{#SSLPORT},{#SSLDOMAIN},{#TIMEOUT}])&lt;30 and last(/Template SSL Certificate Monitoring with Discovery/ssl_cert_check_expire[{#IPADDR},{#SSLPORT},{#SSLDOMAIN},{#TIMEOUT}])&gt;8</expression>
+                                    <name>SSL Certificate for {#SSLDOMAIN} on {#IPADDR}:{#SSLPORT} expires in 8-30 days</name>
+                                    <opdata>Days: {ITEM.LASTVALUE3} of {ITEM.LASTVALUE2} ({ITEM.LASTVALUE1})</opdata>
                                     <priority>AVERAGE</priority>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <uuid>d9d4dc285ef349699a5c456682218fda</uuid>
+                                    <expression>last(/Template SSL Certificate Monitoring with Discovery/ssl_cert_check_expire[{#IPADDR},{#SSLPORT},{#SSLDOMAIN},{#TIMEOUT}])&lt;60 and last(/Template SSL Certificate Monitoring with Discovery/ssl_cert_check_expire[{#IPADDR},{#SSLPORT},{#SSLDOMAIN},{#TIMEOUT}])&gt;31</expression>
+                                    <name>SSL Certificate for {#SSLDOMAIN} on {#IPADDR}:{#SSLPORT} expires in 31-60 days</name>
+                                    <event_name>SSL Certificate for {#SSLDOMAIN} on {#IPADDR}:{#SSLPORT} expires in {ITEM.LASTVALUE} days</event_name>
+                                    <opdata>Days: {ITEM.LASTVALUE3} of {ITEM.LASTVALUE2} ({ITEM.LASTVALUE1})</opdata>
+                                    <priority>INFO</priority>
+                                    <manual_close>YES</manual_close>
                                 </trigger_prototype>
                             </trigger_prototypes>
                         </item_prototype>
